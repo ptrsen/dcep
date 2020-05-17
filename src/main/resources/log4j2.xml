@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+    <!-- Logging Properties -->
+    <Properties>
+        <Property name="console_pattern">%highlight{[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n}{FATAL=red blink, ERROR=red, WARN=yellow bold, INFO=black, DEBUG=green bold, TRACE=blue}</Property>
+        <Property name="console_log_filename">console_log</Property>
+        <Property name="console_log_file">all.log</Property>
+        <Property name="console_log_file_pattern">[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n</Property>
+    <!--      <Property name="data_filename">data_log</Property>
+        <Property name="data_file">data.csv</Property>
+         <Property name="data_fileheader"></Property>
+    -->
+   </Properties>
+
+   <!-- Logging Appenders -->
+    <Appenders>
+        <!-- Console -->
+        <Console name="console" target="system_out">
+            <PatternLayout disableAnsi="false" pattern="${console_pattern}" />
+        </Console>
+        <!-- Files -->
+        <File name="${console_log_filename}" fileName="${console_log_file}" immediateFlush="false" append="false">
+            <PatternLayout pattern="${console_log_file_pattern}"/>
+        </File>
+
+    </Appenders>
+    <!-- Loggers -->
+    <Loggers>
+        <Root level="trace" additivity="false">
+            <AppenderRef ref="console" />
+            <AppenderRef ref="${console_log_filename}" />
+        </Root>
+    </Loggers>
+
+
+</Configuration>
