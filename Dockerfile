@@ -13,5 +13,6 @@ RUN mvn -f /usr/src/app/pom.xml clean package
 FROM openjdk:11-jre
 WORKDIR /usr/src/app
 COPY --from=build /usr/src/app/target/dcep-1.0-shaded.jar /usr/src/app
+#EXPOSE 8080
 #ENTRYPOINT ["sh", "-c"]
 #CMD ["java -jar /usr/app/dcep-1.0-shaded.jar"]

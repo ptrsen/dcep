@@ -10,11 +10,11 @@ public class dcep {
     public static void main(String[] args) {
 
         consolelogger.trace("Trace Message!");
-        consolelogger.debug("Debug Message!");
-        consolelogger.info("Info Message!");
-        consolelogger.warn("Warn Message!");
-        consolelogger.error("Error Message Logged !!!", new NullPointerException("NullError"));
-        consolelogger.fatal("Fatal Message!");
+       // consolelogger.debug("Debug Message!");
+       // consolelogger.info("Info Message!");
+       // consolelogger.warn("Warn Message!");
+       // consolelogger.error("Error Message Logged !!!", new NullPointerException("NullError"));
+       // consolelogger.fatal("Fatal Message!");
 
 
 
