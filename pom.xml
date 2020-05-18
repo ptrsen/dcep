@@ -10,6 +10,8 @@
     <packaging>jar</packaging>
 
     <properties>
+        <gossip.version>0.1.2-incubating</gossip.version>
+        <slf4j-jdk14.version>1.7.30</slf4j-jdk14.version>
         <log4j.version>2.13.2</log4j.version>
         <commons-csv.version>1.8</commons-csv.version>
         <maven.compiler.version>3.8.0</maven.compiler.version>
@@ -21,6 +23,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.apache.gossip</groupId>
+            <artifactId>gossip</artifactId>
+            <version>${gossip.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
@@ -29,6 +36,11 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-jdk14</artifactId>
+            <version>${slf4j-jdk14.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -66,7 +78,9 @@
                                         <exclude>META-INF/*.MF</exclude>
                                         <exclude>META-INF/DEPENDENCIES</exclude>
                                         <exclude>META-INF/LICENSE</exclude>
+                                        <exclude>META-INF/LICENSE.txt</exclude>
                                         <exclude>META-INF/NOTICE</exclude>
+                                        <exclude>META-INF/NOTICE.txt</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
