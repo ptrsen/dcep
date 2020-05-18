@@ -33,6 +33,8 @@ public class dcep {
 
         inet net = null;
         String myIp = null;
+       // String defaultInterface = "ens33";
+        String defaultInterface = "eth0";
         try {
             net = new inet();
         } catch (SocketException e) {
@@ -41,7 +43,7 @@ public class dcep {
 
         try {
             assert net != null;
-            myIp = net.getInterfaceIP("ens33"); // Get my ip address
+            myIp = net.getInterfaceIP(defaultInterface); // Get my ip address
         } catch (SocketException e) {
             consolelogger.error("Error network interface not found: "+ e.toString());
         }
