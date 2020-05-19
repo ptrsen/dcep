@@ -1,18 +1,33 @@
+############################################################
+# Clone stage
+############################################################
+
 FROM alpine/git as clone
-WORKDIR /usr/src/app
+WORKDIR /app
 RUN git clone https://github.com/ptrsen/dcep.git
 
-
+############################################################
+# Build stage
+############################################################
 FROM maven:3.6.3-jdk-11 as build
-WORKDIR /usr/src/app
-COPY --from=clone /usr/src/app/dcep/src /usr/src/app/src
-COPY --from=clone /usr/src/app/dcep/pom.xml  /usr/src/app
-RUN mvn -f /usr/src/app/pom.xml clean package
+WORKDIR /app
+COPY --from=clone /app/dcep/src /app/src
+COPY --from=clone /app/dcep/pom.xml  /app
+RUN mvn -f /app/pom.xml clean package
 
-
+############################################################
+# Run stage
+###########################################################
 FROM openjdk:11-jre
-WORKDIR /usr/src/app
-COPY --from=build /usr/src/app/target/dcep-1.0-shaded.jar /usr/src/app
-#EXPOSE 8080
+WORKDIR /app
+COPY --from=build /app/target/dcep-1.0-shaded.jar /app
+RUN apt-get update && apt-get install -y \
+    net-tools \
+    iperf3 \
+    telnet \
+    nmap \
+    netcat
+
+EXPOSE 10000/udp
 #ENTRYPOINT ["sh", "-c"]
 #CMD ["java -jar /usr/app/dcep-1.0-shaded.jar"]
