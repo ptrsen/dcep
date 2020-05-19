@@ -59,8 +59,8 @@ public class dcep {
         String gossipPort = "10000";
         String gossipMember =  gossipProtocol+"://"+ gossipMemberIP + ":" + gossipPort;
 
-      //  String seedGossipMemberIP = "10.12.0.1";
-        String seedGossipMemberIP = "172.17.0.3";
+        String seedGossipMemberIP = "10.12.0.1";
+      //  String seedGossipMemberIP = "172.17.0.3";
         String seedGossipMemberID = "753e4e4c-3e26-4e26-accf-3142752ed0a9";
         String seedGossipMember =  gossipProtocol+"://"+ seedGossipMemberIP + ":" + gossipPort;
 
