@@ -119,7 +119,7 @@ public class dcep {
                 System.out.println("********** " + gossipService.getGossipManager().findCrdt("abc"));
 
                 try {
-                    Thread.sleep(2000L);
+                    Thread.sleep(2500L);
                 } catch (Exception var2) {
                 }
             }
@@ -133,11 +133,14 @@ public class dcep {
                 System.out.println(line);
                 char op = line.charAt(0);
                 String val = line.substring(2);
+
                 if (op == 'a') {
                     addData(val, gossipService);
-                } else {
+                }
+                if (op == 'r') {
                     removeData(val, gossipService);
                 }
+
             }
         } catch (Throwable var15) {
             var5 = var15;
