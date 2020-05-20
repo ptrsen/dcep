@@ -77,7 +77,7 @@ public class dcep {
         String seedGossipMember =  gossipProtocol+"://"+ seedGossipMemberIP + ":" + gossipPort;
 
         String gossipMemberID = null;
-        if (gossipMemberIP == seedGossipMemberIP ){
+        if (gossipMemberIP.contentEquals(seedGossipMemberIP) ){
             gossipMemberID = seedGossipMemberID;
         }else {
             gossipMemberID = UUID.randomUUID().toString(); // Random UUID
@@ -110,31 +110,30 @@ public class dcep {
             Thread.sleep(1000L);
         }  */
          // thread to print
+
         (new Thread(() -> {
             while(true) {
-                consolelogger.trace("Live nodes: " + gossipService.getGossipManager().getLiveMembers());
-                consolelogger.trace("Dead nodes: " + gossipService.getGossipManager().getDeadMembers());
-                consolelogger.trace("---------- " + (gossipService.getGossipManager().findCrdt("abc") == null ? "" : gossipService.getGossipManager().findCrdt("abc").value()));
-                consolelogger.trace("********** " + gossipService.getGossipManager().findCrdt("abc"));
+                System.out.println("Live: " + gossipService.getGossipManager().getLiveMembers());
+                System.out.println("Dead: " + gossipService.getGossipManager().getDeadMembers());
+                System.out.println("---------- " + (gossipService.getGossipManager().findCrdt("abc") == null ? "" : gossipService.getGossipManager().findCrdt("abc").value()));
+                System.out.println("********** " + gossipService.getGossipManager().findCrdt("abc"));
+
                 try {
                     Thread.sleep(2000L);
                 } catch (Exception var2) {
                 }
             }
         })).start();
-
-
         String line = null;
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // read data
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         Throwable var5 = null;
 
         try {
             while((line = br.readLine()) != null) {
-                consolelogger.trace(line);
-
+                System.out.println(line);
                 char op = line.charAt(0);
                 String val = line.substring(2);
-                if (op == 's') {
+                if (op == 'a') {
                     addData(val, gossipService);
                 } else {
                     removeData(val, gossipService);
@@ -152,11 +151,7 @@ public class dcep {
                         var5.addSuppressed(var14);
                     }
                 } else {
-                    try {
-                        br.close();
-                    } catch (IOException e) {
-                        consolelogger.error("Error closing input stream: "+ e.toString());
-                    }
+                    br.close();
                 }
             }
 
