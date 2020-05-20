@@ -9,21 +9,32 @@ import org.apache.gossip.GossipMember;
 import org.apache.gossip.RemoteGossipMember;
 import org.apache.gossip.GossipService;
 
+import org.apache.gossip.crdt.OrSet;
+import org.apache.gossip.crdt.OrSet.Builder;
+import org.apache.gossip.model.SharedGossipDataMessage;
+
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
+
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URI;
 
 import java.net.*;
 import java.util.UUID;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Arrays;
 
 
 public class dcep {
 
     private static final Logger consolelogger = LogManager.getLogger("console_log");
 
-    public static void main(String[] args) throws UnknownHostException, InterruptedException {
+    public static void main(String[] args) throws IOException, InterruptedException {
 
        // consolelogger.trace("Trace Message!");
        // consolelogger.debug("Debug Message!");
@@ -61,6 +72,7 @@ public class dcep {
 
         String seedGossipMemberIP = "10.12.0.1";
       //  String seedGossipMemberIP = "172.17.0.3";
+       // String seedGossipMemberIP = "172.16.143.172";
         String seedGossipMemberID = "753e4e4c-3e26-4e26-accf-3142752ed0a9";
         String seedGossipMember =  gossipProtocol+"://"+ seedGossipMemberIP + ":" + gossipPort;
 
@@ -92,15 +104,87 @@ public class dcep {
         gossipService.start();
 
 
-        while(true) {
+      /*  while(true) {
              consolelogger.trace("Live Nodes: " + gossipService.getGossipManager().getLiveMembers());
              consolelogger.trace("Dead Nodes: " + gossipService.getGossipManager().getDeadMembers());
             Thread.sleep(1000L);
+        }  */
+         // thread to print
+        (new Thread(() -> {
+            while(true) {
+                consolelogger.trace("Live nodes: " + gossipService.getGossipManager().getLiveMembers());
+                consolelogger.trace("Dead nodes: " + gossipService.getGossipManager().getDeadMembers());
+                consolelogger.trace("---------- " + (gossipService.getGossipManager().findCrdt("abc") == null ? "" : gossipService.getGossipManager().findCrdt("abc").value()));
+                consolelogger.trace("********** " + gossipService.getGossipManager().findCrdt("abc"));
+                try {
+                    Thread.sleep(2000L);
+                } catch (Exception var2) {
+                }
+            }
+        })).start();
+
+
+        String line = null;
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); // read data
+        Throwable var5 = null;
+
+        try {
+            while((line = br.readLine()) != null) {
+                consolelogger.trace(line);
+
+                char op = line.charAt(0);
+                String val = line.substring(2);
+                if (op == 's') {
+                    addData(val, gossipService);
+                } else {
+                    removeData(val, gossipService);
+                }
+            }
+        } catch (Throwable var15) {
+            var5 = var15;
+            throw var15;
+        } finally {
+            if (br != null) {
+                if (var5 != null) {
+                    try {
+                        br.close();
+                    } catch (Throwable var14) {
+                        var5.addSuppressed(var14);
+                    }
+                } else {
+                    try {
+                        br.close();
+                    } catch (IOException e) {
+                        consolelogger.error("Error closing input stream: "+ e.toString());
+                    }
+                }
+            }
+
         }
 
 
 
 
+    }
+
+
+    private static void removeData(String val, GossipService gossipService) {
+        OrSet<String> s = (OrSet)gossipService.getGossipManager().findCrdt("abc");
+        SharedGossipDataMessage m = new SharedGossipDataMessage();
+        m.setExpireAt(9223372036854775807L);
+        m.setKey("abc");
+        m.setPayload(new OrSet(s, (new OrSet.Builder()).remove(val)));
+        m.setTimestamp(System.currentTimeMillis());
+        gossipService.getGossipManager().merge(m);
+    }
+
+    private static void addData(String val, GossipService gossipService) {
+        SharedGossipDataMessage m = new SharedGossipDataMessage();
+        m.setExpireAt(9223372036854775807L);
+        m.setKey("abc");
+        m.setPayload(new OrSet(new String[]{val}));
+        m.setTimestamp(System.currentTimeMillis());
+        gossipService.getGossipManager().merge(m);
     }
 
 
